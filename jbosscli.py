@@ -4,13 +4,8 @@
 import sys
 import logging
 import json
+import requests
 from tabulate import tabulate
-
-try:
-    import requests
-except ImportError:
-    print('Please install the Python requests module.')
-    sys.exit(1)
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("jbosscli")
@@ -47,6 +42,8 @@ class JBossHelper(object):
                 headers=headers,
                 auth=requests.auth.HTTPDigestAuth(self.credentials[0], self.credentials[1])
                 )
+
+        log.debug("Response code: %s"%r.status_code)
 
         if (r.status_code >= 400 and not r.text):
             raise JBossException("Got %s code from server."%(r.status_code))
